@@ -44,15 +44,17 @@ const variantClasses: Record<Variant, string> = {
 
 const isInteractive = computed(() => !props.disabled && !props.loading);
 
-const buttonClasses = computed(() => [
-  "btn",
-  "btn--" + props.size,
-  variantClasses[props.variant],
-  sizeClasses[props.size],
-  props.uppercase && "uppercase",
-  props.block && "w-full",
-  !isInteractive.value && "btn--disabled",
-]);
+const buttonClasses = computed(() =>
+  [
+    "btn",
+    "btn--" + props.size,
+    variantClasses[props.variant],
+    sizeClasses[props.size],
+    props.uppercase && "uppercase",
+    props.block && "w-full",
+    !isInteractive.value && "btn--disabled",
+  ].filter(Boolean)
+);
 
 const handleClick = (event: MouseEvent) => {
   if (!isInteractive.value) {

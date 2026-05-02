@@ -8,6 +8,7 @@ import {
 export const RouteName = {
   Home: "home",
   Barn: "barn",
+  Preview: "preview",
 } as const;
 
 export type RouteNameValue = (typeof RouteName)[keyof typeof RouteName];
@@ -16,7 +17,7 @@ const routes: readonly RouteRecordRaw[] = [
   {
     path: "/",
     name: RouteName.Home,
-    component: () => import("../components/Preview.vue"),
+    component: () => import("../views/HorseRace.vue"),
     meta: { title: "Hipodrom" },
   },
   {
@@ -24,6 +25,12 @@ const routes: readonly RouteRecordRaw[] = [
     name: RouteName.Barn,
     component: () => import("../views/BarnView.vue"),
     meta: { title: "Ahır" },
+  },
+  {
+    path: "/preview",
+    name: RouteName.Preview,
+    component: () => import("../components/Preview.vue"),
+    meta: { title: "UI Showcase" },
   },
   {
     path: "/:pathMatch(.*)*",

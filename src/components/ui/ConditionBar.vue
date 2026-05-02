@@ -86,8 +86,8 @@ const ariaValueText = computed(
 
 <style scoped>
 .condition-bar {
-  display: grid;
-  grid-template-columns: var(--cb-label-width) 1fr var(--cb-value-width);
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: var(--cb-gap);
   width: 100%;
@@ -103,6 +103,7 @@ const ariaValueText = computed(
 }
 
 .condition-bar__track {
+  width: 100%;
   position: relative;
   height: var(--cb-height);
   background: var(--cb-track-bg);

@@ -2,7 +2,7 @@
 import { computed } from "vue";
 
 type Variant = "danger" | "warning" | "success" | "info" | "purple" | "neutral";
-type Size = "sm" | "md";
+type Size = "sm" | "md" | "lg" | "xl";
 type Tag = "span" | "div";
 
 interface Props {
@@ -38,6 +38,8 @@ const emit = defineEmits<{
 const sizeClasses: Record<Size, string> = {
   sm: "text-[11px] px-2 py-0.5 gap-1",
   md: "text-xs px-3 py-1 gap-1.5",
+  lg: "text-sm px-3.5 py-1.5 gap-2",
+  xl: "text-base px-4 py-2 gap-2.5",
 };
 
 const variantClasses: Record<Variant, string> = {

@@ -169,10 +169,7 @@ function statusClass(status: RoundStatus) {
   width: 100%;
   box-sizing: border-box;
   font-family: var(--font-body);
-  background: var(--color-surface);
-  border: 1px solid var(--color-line);
-  border-radius: var(--rt-radius);
-  padding: var(--rt-padding-y) var(--rt-padding-x);
+  padding: var(--rt-padding-y);
 }
 
 .round-timeline__header {

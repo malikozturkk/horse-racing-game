@@ -10,7 +10,7 @@ export const HORSE_NAMES: readonly string[] = [
   "Yaman",
   "Gökşin",
   "Tardu",
-  "İlter",
+  "Beyaz Saray",
   "Bayar",
   "Noyan",
   "Tuğra",
@@ -102,7 +102,7 @@ export const HORSE_COLORINGS: readonly HorseColoring[] = [
     bodyLight: "#FFFAF0",
     mane: "#8B7B5C",
     blaze: "none",
-    coatName: "Beyaz",
+    coatName: "Selahattin",
   },
   {
     body: "#6B4226",

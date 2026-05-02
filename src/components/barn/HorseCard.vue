@@ -255,8 +255,5 @@ const cardStyle = computed(() => ({
   .horse-card__name {
     font-size: 16px;
   }
-  .horse-card__lane {
-    height: 96px;
-  }
 }
 </style>

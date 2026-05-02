@@ -1,51 +1,30 @@
-import { onMounted, onUnmounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useBarnStore } from "../stores/barnStore";
 
 export interface UseBarnOptions {
-  autoTick?: boolean;
-  tickInterval?: number;
-  maxDecay?: number;
+  readonly autoTick?: boolean;
+  readonly tickInterval?: number;
+  readonly maxDecay?: number;
 }
 
-export function useBarn(options: UseBarnOptions = {}) {
-  const { autoTick = true, tickInterval = 250, maxDecay = 1.4 } = options;
-
+export const useBarn = (_options: UseBarnOptions = {}) => {
+  void _options;
   const store = useBarnStore();
-  const { allHorses, raceEntrants, hasLineup } = storeToRefs(store);
-
-  let timerId: ReturnType<typeof setInterval> | undefined;
-
-  function startTick(): void {
-    if (timerId !== undefined) return;
-    timerId = setInterval(
-      () => store.tickBarnConditions(maxDecay),
-      tickInterval
-    );
-  }
-
-  function stopTick(): void {
-    if (timerId !== undefined) {
-      clearInterval(timerId);
-      timerId = undefined;
-    }
-  }
-
-  onMounted(() => {
-    if (autoTick) startTick();
-  });
-  onUnmounted(() => {
-    stopTick();
-  });
+  const { allHorses, horseCount, isPopulated } = storeToRefs(store);
 
   return {
     allHorses,
-    raceEntrants,
-    hasLineup,
-    drawLineup: store.drawLineup,
+    horseCount,
+    isPopulated,
+
+    getById: store.getById,
+    getByIds: store.getByIds,
+    generateBarn: store.generateBarn,
     resetBarn: store.resetBarn,
+    setCondition: store.setCondition,
+    applyConditionDelta: store.applyConditionDelta,
     recoverHorse: store.recoverHorse,
-    startTick,
-    stopTick,
+    startTick: () => undefined,
+    stopTick: () => undefined,
   };
-}
+};

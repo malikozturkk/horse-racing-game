@@ -3,7 +3,6 @@ import { ref } from "vue";
 import Button from "./ui/Button.vue";
 import Badge from "./ui/Badge.vue";
 import RoundTimeline from "./ui/RoundTimeline.vue";
-import BarnPanel from "./horse/BarnPanel.vue";
 
 const isRunning = ref(false);
 const isLoading = ref(false);
@@ -199,7 +198,5 @@ const setFilter = (f: Filter) => {
         <Badge variant="danger" disabled dot>Disabled + Dot</Badge>
       </div>
     </div>
-
-    <BarnPanel />
   </section>
 </template>

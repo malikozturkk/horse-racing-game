@@ -2,43 +2,8 @@
 import { ref } from "vue";
 import Button from "./ui/Button.vue";
 import Badge from "./ui/Badge.vue";
-import ConditionBar from "./ui/ConditionBar.vue";
 import RoundTimeline from "./ui/RoundTimeline.vue";
-import { reactive, onMounted, onUnmounted } from "vue";
-
-interface Horse {
-  id: number;
-  name: string;
-  condition: number;
-}
-
-const horses = reactive<Horse[]>([
-  { id: 1, name: "Yıldırım", condition: 96 },
-  { id: 2, name: "Şimşek", condition: 88 },
-  { id: 3, name: "Kasırga", condition: 74 },
-  { id: 4, name: "Bora", condition: 68 },
-  { id: 5, name: "Tipi", condition: 55 },
-  { id: 6, name: "Mistik", condition: 47 },
-  { id: 7, name: "Rüzgar", condition: 41 },
-  { id: 8, name: "Karayel", condition: 33 },
-  { id: 9, name: "Lodos", condition: 22 },
-  { id: 10, name: "Poyraz", condition: 12 },
-]);
-
-let conditionTimer: number | undefined;
-
-onMounted(() => {
-  conditionTimer = window.setInterval(() => {
-    for (const h of horses) {
-      const drop = Math.random() * 1.4;
-      h.condition = h.condition <= drop ? 100 : h.condition - drop;
-    }
-  }, 250);
-});
-
-onUnmounted(() => {
-  if (conditionTimer !== undefined) window.clearInterval(conditionTimer);
-});
+import BarnPanel from "./horse/BarnPanel.vue";
 
 const isRunning = ref(false);
 const isLoading = ref(false);
@@ -53,6 +18,7 @@ const stop = () => {
 const reset = () => {
   isRunning.value = false;
 };
+
 const showResults = async () => {
   isLoading.value = true;
   await new Promise((r) => setTimeout(r, 1200));
@@ -83,24 +49,30 @@ const setFilter = (f: Filter) => {
 
     <div class="rounded-2xl border border-line bg-surface px-5 py-4">
       <p class="label mb-3 uppercase tracking-widest text-ink/60">Butonlar</p>
-
       <div class="flex flex-wrap items-center gap-3">
-        <Button variant="primary" size="lg" @click="generateProgram">
-          Program Üret
-        </Button>
-        <Button variant="primary" size="md" @click="start">Başlat</Button>
+        <Button variant="primary" size="lg" @button-click="generateProgram"
+          >Program Üret</Button
+        >
+        <Button variant="primary" size="md" @button-click="start"
+          >Başlat</Button
+        >
         <Button
           variant="info"
           size="md"
           :loading="isLoading"
-          @click="showResults"
+          @button-click="showResults"
+          >Sonuçlar</Button
         >
-          Sonuçlar
-        </Button>
-        <Button variant="danger" size="md" :disabled="!isRunning" @click="stop">
-          Durdur
-        </Button>
-        <Button variant="outline" size="md" @click="reset">Sıfırla</Button>
+        <Button
+          variant="danger"
+          size="md"
+          :disabled="!isRunning"
+          @button-click="stop"
+          >Durdur</Button
+        >
+        <Button variant="outline" size="md" @button-click="reset"
+          >Sıfırla</Button
+        >
         <Button variant="primary" size="sm">Küçük</Button>
       </div>
     </div>
@@ -220,7 +192,6 @@ const setFilter = (f: Filter) => {
 
     <div class="rounded-2xl border border-line bg-surface px-5 py-4">
       <p class="label mb-3 uppercase tracking-widest text-ink/60">State'ler</p>
-
       <div class="flex flex-wrap items-center gap-3">
         <Badge variant="success" interactive>Default</Badge>
         <Badge variant="success" interactive active>Active</Badge>
@@ -229,29 +200,6 @@ const setFilter = (f: Filter) => {
       </div>
     </div>
 
-    <div class="rounded-2xl border border-line bg-surface px-5 py-4">
-      <p class="label mb-3 uppercase tracking-widest text-ink/60">
-        Kondisyon Barları (canlı düşüş)
-      </p>
-
-      <ul class="space-y-2.5">
-        <li
-          v-for="horse in horses"
-          :key="horse.id"
-          v-memo="[horse.condition]"
-          class="grid grid-cols-[7rem_1fr] items-center gap-4"
-        >
-          <span class="text-sm font-semibold text-ink truncate">
-            {{ horse.name }}
-          </span>
-          <ConditionBar :value="horse.condition" />
-        </li>
-      </ul>
-
-      <p class="mt-3 text-xs text-ink/60">
-        10 at × ~250 ms tick. Yalnızca kondisyonu değişen satır yeniden render
-        olur (computed cache + <code>v-memo</code>).
-      </p>
-    </div>
+    <BarnPanel />
   </section>
 </template>

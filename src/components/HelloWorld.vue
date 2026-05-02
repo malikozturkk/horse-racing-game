@@ -3,6 +3,7 @@ import { ref } from "vue";
 import Button from "./ui/Button.vue";
 import Badge from "./ui/Badge.vue";
 import ConditionBar from "./ui/ConditionBar.vue";
+import RoundTimeline from "./ui/RoundTimeline.vue";
 import { reactive, onMounted, onUnmounted } from "vue";
 
 interface Horse {
@@ -58,6 +59,16 @@ const showResults = async () => {
   isLoading.value = false;
 };
 
+const rounds = [
+  { distance: 1200 },
+  { distance: 1400 },
+  { distance: 1600 },
+  { distance: 1800 },
+  { distance: 2000 },
+  { distance: 2200 },
+];
+const currentRound = ref(2);
+
 const filters = ["Tümü", "Sıradaki", "Tamamlandı", "Bekliyor"] as const;
 type Filter = (typeof filters)[number];
 const activeFilter = ref<Filter>("Tümü");
@@ -68,6 +79,8 @@ const setFilter = (f: Filter) => {
 
 <template>
   <section class="space-y-6 p-8">
+    <RoundTimeline :rounds="rounds" :current-index="currentRound" />
+
     <div class="rounded-2xl border border-line bg-surface px-5 py-4">
       <p class="label mb-3 uppercase tracking-widest text-ink/60">Butonlar</p>
 

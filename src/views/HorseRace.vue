@@ -512,30 +512,29 @@ const showResultsRight = computed(
       class="hv__mtabs"
       aria-label="Sayfa sekmeleri"
     >
-      <button
-        type="button"
-        class="hv__mtab"
-        :class="{ 'hv__mtab--active': mobileTab === 'race' }"
-        @click="mobileTab = 'race'"
+      <Button
+        :variant="mobileTab === 'race' ? 'primary' : 'outline'"
+        size="md"
+        @button-click="mobileTab = 'race'"
       >
         Yarış
-      </button>
-      <button
-        type="button"
-        class="hv__mtab"
-        :class="{ 'hv__mtab--active': mobileTab === 'horses' }"
-        @click="mobileTab = 'horses'"
+      </Button>
+
+      <Button
+        :variant="mobileTab === 'horses' ? 'primary' : 'outline'"
+        size="md"
+        @button-click="mobileTab = 'horses'"
       >
         Atlar
-      </button>
-      <button
-        type="button"
-        class="hv__mtab"
-        :class="{ 'hv__mtab--active': mobileTab === 'results' }"
-        @click="mobileTab = 'results'"
+      </Button>
+
+      <Button
+        :variant="mobileTab === 'results' ? 'primary' : 'outline'"
+        size="md"
+        @button-click="mobileTab = 'results'"
       >
         Sonuç
-      </button>
+      </Button>
     </nav>
   </main>
 </template>
@@ -727,29 +726,11 @@ const showResultsRight = computed(
     border-top: 1px solid var(--color-line);
     z-index: 40;
     box-shadow: 0 -4px 16px -8px rgba(0, 0, 0, 0.1);
+    width: 100%;
   }
 
-  .hv__mtab {
-    flex: 1;
-    appearance: none;
-    background: transparent;
-    border: 1.5px solid var(--color-line);
-    border-radius: 9999px;
-    padding: 0.4rem 0.6rem;
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: color-mix(in srgb, var(--color-ink) 60%, white);
-    cursor: pointer;
-    transition: all 160ms ease;
-  }
-
-  .hv__mtab--active {
-    background: var(--color-ink);
-    color: #fff;
-    border-color: var(--color-ink);
+  .hv__mtabs > * {
+    flex: 1 1 0;
   }
 }
 

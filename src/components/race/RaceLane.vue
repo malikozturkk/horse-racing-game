@@ -70,6 +70,7 @@ const accent = computed(() => props.horse.visual.coloring.body);
   display: flex;
   align-items: center;
   padding-left: 8px;
+  overflow: hidden;
 }
 
 .lane__number {
@@ -87,6 +88,7 @@ const accent = computed(() => props.horse.visual.coloring.body);
   border: 2px solid var(--ink);
   flex-shrink: 0;
   box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.25);
+  z-index: 2;
 }
 
 .lane__start-line {
@@ -104,10 +106,10 @@ const accent = computed(() => props.horse.visual.coloring.body);
   top: 50%;
   left: calc(var(--lane-progress, 0) * 100%);
   transform: translate(calc(var(--lane-progress, 0) * -100%), -50%);
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
   white-space: nowrap;
+  z-index: 1;
 }
 
 .lane--static .lane__horse {
@@ -129,6 +131,11 @@ const accent = computed(() => props.horse.visual.coloring.body);
 }
 
 .lane__horse-tag {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  margin-left: 6px;
   display: inline-flex;
   align-items: center;
   padding: 1px 7px;
@@ -143,6 +150,7 @@ const accent = computed(() => props.horse.visual.coloring.body);
   white-space: nowrap;
   flex-shrink: 0;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+  pointer-events: none;
 }
 
 .lane__finish {
@@ -161,6 +169,7 @@ const accent = computed(() => props.horse.visual.coloring.body);
   border-left: 2px solid var(--ink);
   border-right: 2px solid var(--ink);
   border-radius: 4px;
+  z-index: 2;
 }
 
 .lane--finished .lane__horse-tag {

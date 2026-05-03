@@ -17,6 +17,7 @@ interface Props {
   liveDistance: number;
   results: readonly RoundResult[];
   isLive: boolean;
+  isPaused: boolean;
   isPhotoFinish: boolean;
 }
 
@@ -75,11 +76,12 @@ interface RowVm {
 }
 
 const fmtMeters = (n: number): string => {
-  const v = Math.round(Math.abs(n));
+  const v = Math.round(Math.max(0, n));
   return `+${v}m`;
 };
 
 const fmtDuration = (ms: number): string => {
+  if (!Number.isFinite(ms) || ms < 0) return "—";
   const totalSec = ms / 1000;
   const m = Math.floor(totalSec / 60);
   const s = totalSec - m * 60;
@@ -97,12 +99,11 @@ const liveRows = computed<readonly RowVm[]>(() => {
     const horse = props.horsesById[p.horseId];
     if (!horse) continue;
     idx += 1;
-    const gap = leaderProgress - p.progressMeters;
-    out.push({
-      rank: idx,
-      horse,
-      trailing: idx === 1 ? "+0m" : fmtMeters(gap),
-    });
+    const trailing =
+      p.finishedAt !== null
+        ? fmtDuration(p.finishedAt)
+        : fmtMeters(leaderProgress - p.progressMeters);
+    out.push({ rank: idx, horse, trailing });
   }
   return out;
 });
@@ -146,22 +147,34 @@ const handleTabClick = (n: number) => {
   selectedTab.value = n;
 };
 
-const panelStatus = computed<{
+interface PanelStatusVm {
   label: string;
   variant: "danger" | "warning" | "success" | "info";
   pulse: boolean;
   dot: boolean;
-}>(() => {
-  if (props.isPhotoFinish) {
-    return {
-      label: "FOTO FİNİŞ",
-      variant: "warning",
-      pulse: false,
-      dot: true,
-    };
-  }
-  if (props.isLive) {
-    return { label: "CANLI", variant: "danger", pulse: true, dot: true };
+}
+
+const panelStatus = computed<PanelStatusVm>(() => {
+  if (isLiveTab.value) {
+    if (props.isPhotoFinish) {
+      return {
+        label: "FOTO FİNİŞ",
+        variant: "warning",
+        pulse: false,
+        dot: true,
+      };
+    }
+    if (props.isLive) {
+      return { label: "CANLI", variant: "danger", pulse: true, dot: true };
+    }
+    if (props.isPaused) {
+      return {
+        label: "DURAKLATILDI",
+        variant: "warning",
+        pulse: false,
+        dot: true,
+      };
+    }
   }
   return { label: "ROUND BİTTİ", variant: "success", pulse: false, dot: true };
 });

@@ -36,8 +36,14 @@ const session = useSessionStore();
 
 const { allHorses, byId: horseById } = storeToRefs(barn);
 const { rounds, currentRoundIndex } = storeToRefs(schedule);
-const { runtime, liveStandings, isLive, isPhotoFinish, activeRoundIndex } =
-  storeToRefs(race);
+const {
+  runtime,
+  liveStandings,
+  isLive,
+  isPaused,
+  isPhotoFinish,
+  activeRoundIndex,
+} = storeToRefs(race);
 const { orderedResults, standings, seasonChampion, latestResult } =
   storeToRefs(results);
 const { phase, seasonNumber, statusLabel } = storeToRefs(session);
@@ -486,6 +492,7 @@ const showResultsRight = computed(
             :live-distance="runtime?.distance ?? 0"
             :results="orderedResults"
             :is-live="isLive"
+            :is-paused="isPaused"
             :is-photo-finish="isPhotoFinish"
           />
 

@@ -102,6 +102,21 @@ export const useBarnStore = defineStore("barn", () => {
     byId.value = next;
   };
 
+  const setConditions = (values: ReadonlyMap<HorseId, number>): void => {
+    if (values.size === 0) return;
+    let mutated = false;
+    const next: Record<HorseId, Horse> = { ...byId.value };
+    for (const [id, value] of values) {
+      const horse = next[id];
+      if (!horse) continue;
+      const clamped = clampCondition(value);
+      if (clamped === horse.condition) continue;
+      next[id] = { ...horse, condition: clamped };
+      mutated = true;
+    }
+    if (mutated) byId.value = next;
+  };
+
   const recoverHorse = (horseId: HorseId): void => setCondition(horseId, 100);
 
   return {
@@ -120,6 +135,7 @@ export const useBarnStore = defineStore("barn", () => {
     replaceBarn,
     resetBarn,
     setCondition,
+    setConditions,
     applyConditionDelta,
     applyConditionDeltas,
     recoverHorse,

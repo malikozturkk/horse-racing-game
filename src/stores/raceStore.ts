@@ -80,6 +80,14 @@ export const useRaceStore = defineStore("race", () => {
     }
   };
 
+  const syncBarnConditions = (next: RaceRuntime): void => {
+    const updates = new Map<HorseId, number>();
+    for (const p of next.participants) {
+      updates.set(p.horseId, p.conditionCurrent);
+    }
+    useBarnStore().setConditions(updates);
+  };
+
   const handleTick = (rawDeltaMs: number): void => {
     if (_status.value !== "running") return;
     const r = _runtime.value;
@@ -87,6 +95,7 @@ export const useRaceStore = defineStore("race", () => {
     const { rng } = getServices();
     const next = advance(r, rawDeltaMs, { rng });
     _runtime.value = next;
+    syncBarnConditions(next);
     if (next.isComplete) {
       finishRound();
     }
@@ -112,17 +121,20 @@ export const useRaceStore = defineStore("race", () => {
       _activeRoundIndex.value = null;
       return;
     }
-    const { clock } = getServices();
-    const newRuntime = initRuntime({
-      roundId: round.id,
-      distance: round.distanceMeters,
-      startedAt: clock.now(),
-      participants: horses.map((h, i) => ({
-        horseId: h.id,
-        lane: i,
-        conditionAtStart: h.condition,
-      })),
-    });
+    const { clock, rng } = getServices();
+    const newRuntime = initRuntime(
+      {
+        roundId: round.id,
+        distance: round.distanceMeters,
+        startedAt: clock.now(),
+        participants: horses.map((h, i) => ({
+          horseId: h.id,
+          lane: i,
+          conditionAtStart: h.condition,
+        })),
+      },
+      { rng }
+    );
     _runtime.value = newRuntime;
     _status.value = "arming";
     _activeRoundIndex.value = roundIndex;

@@ -144,15 +144,20 @@ const trackProps = computed<TrackPropsVm | null>(() => {
     const round = currentRound.value;
     if (!round) return null;
     const participants: ParticipantRuntime[] = round.lineup.map(
-      (horseId, idx) => ({
-        horseId,
-        lane: idx,
-        conditionAtStart: horseById.value[horseId]?.condition ?? 0,
-        progressMeters: 88,
-        speedMps: 0,
-        finishedAt: null,
-        finishRank: null,
-      })
+      (horseId, idx) => {
+        const condition = horseById.value[horseId]?.condition ?? 0;
+        return {
+          horseId,
+          lane: idx,
+          conditionAtStart: condition,
+          conditionCurrent: condition,
+          decayPerMeter: 0,
+          progressMeters: 88,
+          speedMps: 0,
+          finishedAt: null,
+          finishRank: null,
+        };
+      }
     );
     return {
       title: round.name,

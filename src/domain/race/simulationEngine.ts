@@ -9,6 +9,7 @@ import {
   RACE_SPEED_FROM_CONDITION_MPS,
   RACE_TIME_SCALE,
 } from "./constants";
+import { sampleDecayPerMeter, tickConditionDecay } from "./conditionDecay";
 
 export interface InitRuntimeInput {
   readonly roundId: RoundId;
@@ -23,7 +24,14 @@ export interface InitParticipantInput {
   readonly conditionAtStart: number;
 }
 
-export const initRuntime = (input: InitRuntimeInput): RaceRuntime => ({
+export interface InitRuntimeDeps {
+  readonly rng: Rng;
+}
+
+export const initRuntime = (
+  input: InitRuntimeInput,
+  deps: InitRuntimeDeps
+): RaceRuntime => ({
   roundId: input.roundId,
   distance: input.distance,
   startedAt: input.startedAt,
@@ -33,6 +41,8 @@ export const initRuntime = (input: InitRuntimeInput): RaceRuntime => ({
       horseId: p.horseId,
       lane: p.lane,
       conditionAtStart: p.conditionAtStart,
+      conditionCurrent: p.conditionAtStart,
+      decayPerMeter: sampleDecayPerMeter(deps.rng),
       progressMeters: 0,
       speedMps: 0,
       finishedAt: null,
@@ -77,9 +87,20 @@ export const advance = (
 
       const target = targetSpeed(p.conditionAtStart, deps.rng);
       const newSpeed = p.speedMps + (target - p.speedMps) * RACE_MOMENTUM;
-      const newProgress = p.progressMeters + newSpeed * simDeltaSec;
+      const newProgressRaw = p.progressMeters + newSpeed * simDeltaSec;
+      const cappedProgress = Math.min(newProgressRaw, runtime.distance);
+      const metersTraveled = cappedProgress - p.progressMeters;
 
-      if (newProgress >= runtime.distance) {
+      const nextConditionCurrent = tickConditionDecay(
+        {
+          current: p.conditionCurrent,
+          decayPerMeter: p.decayPerMeter,
+          metersTraveled,
+        },
+        { rng: deps.rng }
+      );
+
+      if (newProgressRaw >= runtime.distance) {
         const rank = finishedOrder.length + crossedThisTick + 1;
         crossedThisTick += 1;
         finishedOrder.push(p.horseId);
@@ -87,6 +108,7 @@ export const advance = (
           ...p,
           progressMeters: runtime.distance,
           speedMps: newSpeed,
+          conditionCurrent: nextConditionCurrent,
           finishedAt: newElapsedMs,
           finishRank: rank,
         };
@@ -94,8 +116,9 @@ export const advance = (
 
       return {
         ...p,
-        progressMeters: newProgress,
+        progressMeters: newProgressRaw,
         speedMps: newSpeed,
+        conditionCurrent: nextConditionCurrent,
       };
     }
   );

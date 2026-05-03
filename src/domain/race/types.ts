@@ -12,6 +12,8 @@ export interface ParticipantRuntime {
   readonly horseId: HorseId;
   readonly lane: number;
   readonly conditionAtStart: number;
+  readonly conditionCurrent: number;
+  readonly decayPerMeter: number;
   readonly progressMeters: number;
   readonly speedMps: number;
   readonly finishedAt: number | null;

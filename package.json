@@ -8,7 +8,14 @@
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "test:e2e": "playwright test",
+    "test:unit": "vitest --run",
+    "test:unit:watch": "vitest",
+    "test:unit:coverage": "vitest --run --coverage",
+    "test:e2e": "playwright test --project=chromium --grep-invert \"Visual regression\"",
+    "test:visual": "playwright test --project=chromium --grep \"Visual regression\"",
+    "test:visual:update": "playwright test --project=chromium --grep \"Visual regression\" --update-snapshots",
+    "test:e2e:ui": "playwright test --ui",
+    "test:all": "npm run test:unit && npm run test:e2e",
     "lint": "eslint . --ext .ts,.vue"
   },
   "dependencies": {
@@ -27,6 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^8.59.1",
     "@typescript-eslint/parser": "^8.59.1",
     "@vitejs/plugin-vue": "^6.0.6",
+    "@vitest/coverage-v8": "^4.1.5",
     "@vue/test-utils": "^2.4.10",
     "@vue/tsconfig": "^0.9.1",
     "autoprefixer": "^10.5.0",

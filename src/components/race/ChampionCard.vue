@@ -29,7 +29,11 @@ const fmtAvg = (ms: number): string => {
 </script>
 
 <template>
-  <article class="champ" :aria-label="`Sezon şampiyonu: ${champion.name}`">
+  <article
+    class="champ"
+    data-testid="champion-card"
+    :aria-label="`Sezon şampiyonu: ${champion.name}`"
+  >
     <header class="champ__head">
       <span class="champ__eyebrow mono">SEZON ŞAMPİYONU</span>
       <span class="champ__season mono">#{{ seasonNumber }}</span>

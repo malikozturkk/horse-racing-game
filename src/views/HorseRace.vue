@@ -344,7 +344,7 @@ const showResultsRight = computed(
 </script>
 
 <template>
-  <main class="hv">
+  <main class="hv" :data-testid="'hipodrom-root'" :data-view-state="viewState">
     <AppHeader
       title="At Yarışı"
       :subtitle="headerSubtitle"
@@ -357,6 +357,7 @@ const showResultsRight = computed(
           :dot="statusBadge.dot"
           :pulse="statusBadge.pulse"
           size="xl"
+          :data-testid="'status-badge'"
         >
           {{ statusBadge.label }}
         </Badge>
@@ -369,6 +370,7 @@ const showResultsRight = computed(
             size="md"
             :disabled="!canPressGenerate"
             class="hv__btn-generate"
+            data-testid="generate-btn"
             @button-click="handleGenerate"
           >
             Program Üret
@@ -379,6 +381,7 @@ const showResultsRight = computed(
             :variant="startButtonVariant"
             size="md"
             :disabled="!canPressStart"
+            data-testid="start-btn"
             @button-click="handleStart"
           >
             {{ startButtonLabel }}
@@ -388,6 +391,7 @@ const showResultsRight = computed(
             v-else
             variant="primary"
             size="md"
+            data-testid="new-season-btn"
             @button-click="handleNewSeason"
           >
             Başlat

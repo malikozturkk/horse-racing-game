@@ -27,13 +27,18 @@ const totalLabel = computed(() => `${props.rounds.length} ROUND`);
       <Badge variant="success" size="sm">{{ totalLabel }}</Badge>
     </template>
 
-    <ol class="program-panel__list" role="list">
+    <ol
+      class="program-panel__list"
+      role="list"
+      data-testid="program-rounds"
+    >
       <ProgramRoundItem
         v-for="round in rounds"
         :key="round.id"
         :round="round"
         :horses-by-id="horsesById"
         :is-current="currentRoundIndex === round.index"
+        :data-testid="`program-round-${round.index}`"
       />
     </ol>
   </Panel>

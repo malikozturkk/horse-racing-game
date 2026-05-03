@@ -229,13 +229,19 @@ const panelStatus = computed<PanelStatusVm>(() => {
         <span class="lrp__sub mono">{{ headerRight }}</span>
       </header>
 
-      <ol v-if="rows.length > 0" class="lrp__list" role="list">
+      <ol
+        v-if="rows.length > 0"
+        class="lrp__list"
+        role="list"
+        data-testid="results-list"
+      >
         <ResultRow
-          v-for="row in rows"
+          v-for="(row, index) in rows"
           :key="row.horse.id"
           :rank="row.rank"
           :horse="row.horse"
           :trailing="row.trailing"
+          :data-testid="`result-row-${index}`"
         />
       </ol>
 

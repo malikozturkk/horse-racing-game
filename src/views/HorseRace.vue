@@ -671,7 +671,7 @@ const showResultsRight = computed(
 
   .hv__grid > .hv__left {
     grid-area: left;
-    max-height: 320px;
+    max-height: 100%;
     flex: 0 0 auto;
   }
 
@@ -683,16 +683,16 @@ const showResultsRight = computed(
 
 @media (max-width: 720px) {
   .hv {
-    height: auto;
-    min-height: 100vh;
-    min-height: 100dvh;
-    overflow: visible;
+    height: 100dvh;
+    overflow: hidden;
   }
 
   .hv__body {
     padding: 0.75rem 0.75rem 5.5rem;
     gap: 0.65rem;
-    overflow: visible;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
   }
 
   .hv__btn-generate,
@@ -701,16 +701,20 @@ const showResultsRight = computed(
   }
 
   .hv__grid {
-    display: block;
-    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
   }
 
   .hv__left,
   .hv__center,
   .hv__right {
-    grid-area: auto;
-    max-height: none;
     display: none;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .hv__left[data-mobile-active="true"],

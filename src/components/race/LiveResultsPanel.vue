@@ -80,6 +80,11 @@ const fmtMeters = (n: number): string => {
   return `+${v}m`;
 };
 
+const fmtRemaining = (n: number): string => {
+  const v = Math.round(Math.max(0, n));
+  return `${v}m`;
+};
+
 const fmtDuration = (ms: number): string => {
   if (!Number.isFinite(ms) || ms < 0) return "—";
   const totalSec = ms / 1000;
@@ -91,18 +96,19 @@ const fmtDuration = (ms: number): string => {
 const liveRows = computed<readonly RowVm[]>(() => {
   if (!isLiveTab.value) return [];
   const sorted = [...props.liveStandings];
-  const leader = sorted[0];
-  const leaderProgress = leader?.progressMeters ?? 0;
   const out: RowVm[] = [];
   let idx = 0;
   for (const p of sorted) {
     const horse = props.horsesById[p.horseId];
     if (!horse) continue;
     idx += 1;
+
+    const remainingDistance = props.liveDistance - p.progressMeters;
     const trailing =
       p.finishedAt !== null
         ? fmtDuration(p.finishedAt)
-        : fmtMeters(leaderProgress - p.progressMeters);
+        : fmtRemaining(remainingDistance);
+
     out.push({ rank: idx, horse, trailing });
   }
   return out;
